@@ -82,36 +82,35 @@ videosRouter.put('/:id', (req: Request, res: Response) => {
     let minAge = req.body.minAgeRestriction;
     //without Resolution check
     if (updateVideo) {
-        let dataAnswer:{errorsMessages: Array<object>} = {
-            errorsMessages: []
-        }
-        let anyString: any = ''
         //without Resolution check
         let t = {
-            message: anyString(),
+            message:  "Any<String>",
             field: "title"
         }
         let a = {
-            message: typeof anyString,
+            message: "Any<String>",
             field: "author"
         }
         let c = {
-            message: typeof anyString,
+            message: "Any<String>",
             field: "canBeDownloaded"
         }
         let m = {
-            message: typeof anyString,
+            message: "Any<String>",
             field: "minAgeRestriction"
         }
+        let dataAnswer: Array<object> = []
           if (!author || !author.trim() || author.length > 20) {
-            dataAnswer.errorsMessages.push(a)
-        } else if (!title || !title.trim() || title.length > 40) {
-              dataAnswer.errorsMessages.push(t)
+            dataAnswer.push(a)
+        }
+          if (!title || !title.trim() || title.length > 40) {
+              dataAnswer.push(t)
           }
-          else if (typeof cBD !== 'boolean') {
-              dataAnswer.errorsMessages.push(c)
-        } else if ((minAge < 1 && minAge > 18) || typeof minAge !== 'number') {
-              dataAnswer.errorsMessages.push(m)
+          if (typeof cBD !== 'boolean') {
+              dataAnswer.push(c)
+        }
+          if ((minAge < 1 && minAge > 18) || typeof minAge !== 'number') {
+              dataAnswer.push(m)
         }
 
         if (!title || !author || !cBD || !title.trim() || !author.trim() ||
