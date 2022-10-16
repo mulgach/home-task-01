@@ -83,7 +83,7 @@ videosRouter.put('/:id', (req: Request, res: Response) => {
     //without Resolution check
     if (updateVideo) {
         let dataAnswer = []
-        let anyString: Array<string> = []
+        let anyString: any = ''
         //without Resolution check
         let t = {
             message: typeof anyString,
@@ -101,11 +101,12 @@ videosRouter.put('/:id', (req: Request, res: Response) => {
             message: typeof anyString,
             field: "minAgeRestriction"
         }
-        if (!title || !title.trim() || title.length > 40) {
-            dataAnswer.push(t)
-        } else if (!author || !author.trim() || author.length > 20) {
+          if (!author || !author.trim() || author.length > 20) {
             dataAnswer.push(a)
-        } else if (typeof cBD !== 'boolean') {
+        } else if (!title || !title.trim() || title.length > 40) {
+              dataAnswer.push(t)
+          }
+          else if (typeof cBD !== 'boolean') {
             dataAnswer.push(c)
         } else if ((minAge < 1 && minAge > 18) || typeof minAge !== 'number') {
             dataAnswer.push(m)
