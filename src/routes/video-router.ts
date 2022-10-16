@@ -120,12 +120,12 @@ videosRouter.put('/:id', (req: Request, res: Response) => {
           if (typeof cBD !== 'boolean') {
               dataAnswer.push(c)
         }
-          if ((minAge < 1 && minAge > 18) || typeof minAge !== 'number') {
+          if (minAge < 1 || minAge > 18 || typeof minAge !== 'number') {
               dataAnswer.push(m)
         }
 
         if (!title || !author || !cBD || !title.trim() || !author.trim() ||
-            title.length > 40 || author.length > 20 || (minAge < 1 && minAge > 18)
+            title.length > 40 || author.length > 20 || minAge < 1 || minAge > 18
             || typeof title !== 'string' || typeof author !== 'string'
             || typeof cBD !== 'boolean' || typeof minAge !== 'number') {
             res.status(400).send({
