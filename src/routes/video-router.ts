@@ -23,6 +23,7 @@ videosRouter.get('/', (req: Request, res: Response) => {
 videosRouter.post('/', (req: Request, res: Response) => {
     let title = req.body.title;
     let author = req.body.author;
+    let resolution = req.body.availableResolutions;
     let dataAnswer = []
     //without Resolution check
     const t: dateExample = {
@@ -33,6 +34,10 @@ videosRouter.post('/', (req: Request, res: Response) => {
         message: 'Any<String>',
         field: 'author'
     }
+    const r: dateExample = {
+        message: 'Any<String>',
+        field: 'availableResolutions'
+    }
     if (!title || !title.trim() || title.length > 40) {
         dataAnswer.push(t)
     }
@@ -40,8 +45,13 @@ videosRouter.post('/', (req: Request, res: Response) => {
         dataAnswer.push(a)
     }
 
+    let resolutionError = resolution.find((r: Array<string>) => r[0] !== 'P')
+    if (resolutionError) {
+        dataAnswer.push(r)
+    }
+
     if (!title || !author || !title.trim() || !author.trim() ||
-        title.length > 40 || author.length > 20
+        title.length > 40 || author.length > 20 || (resolutionError)
         || typeof title !== 'string' || typeof author!== 'string' ) {
         res.status(400).send ({
             errorsMessages: dataAnswer
@@ -79,6 +89,7 @@ videosRouter.put('/:id', (req: Request, res: Response) => {
     let author = req.body.author;
     let cBD = req.body.canBeDownloaded;
     let minAge = req.body.minAgeRestriction;
+    let dataAnswer: Array<object> = []
     //without Resolution check
     if (updateVideo) {
         //without Resolution check
@@ -99,7 +110,7 @@ videosRouter.put('/:id', (req: Request, res: Response) => {
             message: 'Any<String>',
             field: 'minAgeRestriction'
         }
-        let dataAnswer: Array<object> = []
+
           if (!author || !author.trim() || author.length > 20) {
             dataAnswer.push(a)
         }
