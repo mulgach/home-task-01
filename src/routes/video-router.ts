@@ -23,17 +23,28 @@ videosRouter.post('/', (req: Request, res: Response) => {
     let title = req.body.title;
     let author = req.body.author;
     let avRes = req.body.availableResolutions;
+    let dataAnswer = []
+    let anyString: Array<string> = []
     //without Resolution check
+    let t = {
+        message: typeof anyString,
+        field: "title"
+    }
+    let a = {
+        message: typeof anyString,
+        field: "author"
+    }
+    if (!title || !title.trim() || title.length > 40) {
+        dataAnswer.push(t)
+    } else if (!author || !author.trim() || author.length > 20) {
+        dataAnswer.push(a)
+    }
+
     if (!title || !author || !title.trim() || !author.trim() ||
         title.length > 40 || author.length > 20
         || typeof title !== 'string' || typeof author!== 'string' ) {
         res.status(400).send ({
-            errorsMessages: [
-                {
-                    'message': "wrong property",
-                    'field': "title, author or resolution" //how to define field
-                }
-            ]
+            errorsMessages: dataAnswer
         })
     } else {
         let date = new Date()
@@ -71,17 +82,41 @@ videosRouter.put('/:id', (req: Request, res: Response) => {
     let minAge = req.body.minAgeRestriction;
     //without Resolution check
     if (updateVideo) {
+        let dataAnswer = []
+        let anyString: Array<string> = []
+        //without Resolution check
+        let t = {
+            message: typeof anyString,
+            field: "title"
+        }
+        let a = {
+            message: typeof anyString,
+            field: "author"
+        }
+        let c = {
+            message: typeof anyString,
+            field: "canBeDownloaded"
+        }
+        let m = {
+            message: typeof anyString,
+            field: "minAgeRestriction"
+        }
+        if (!title || !title.trim() || title.length > 40) {
+            dataAnswer.push(t)
+        } else if (!author || !author.trim() || author.length > 20) {
+            dataAnswer.push(a)
+        } else if (typeof cBD !== 'boolean') {
+            dataAnswer.push(c)
+        } else if ((minAge < 1 && minAge > 18) || typeof minAge !== 'number') {
+            dataAnswer.push(m)
+        }
+
         if (!title || !author || !cBD || !title.trim() || !author.trim() ||
             title.length > 40 || author.length > 20 || (minAge < 1 && minAge > 18)
             || typeof title !== 'string' || typeof author !== 'string'
             || typeof cBD !== 'boolean' || typeof minAge !== 'number') {
             res.status(400).send({
-                errorsMessages: [
-                    {
-                        'message': "wrong property",
-                        'field': "title, author, res, canBeDownloaded or minAge" //how to define field
-                    }
-                ]
+                errorsMessages: dataAnswer
             })
         } else {
             updateVideo.title = req.body.title
@@ -90,8 +125,7 @@ videosRouter.put('/:id', (req: Request, res: Response) => {
             updateVideo.canBeDownloaded = req.body.canBeDownloaded
             updateVideo.minAgeRestriction = req.body.minAgeRestriction
             updateVideo.publicationDate = req.body.publicationDate
-            res.send(updateVideo)
-            res.send(204)
+            res.status(204).send(updateVideo)
         }
     } else {
         res.send(404)
