@@ -89,6 +89,7 @@ videosRouter.put('/:id', (req: Request, res: Response) => {
     let author = req.body.author;
     let cBD = req.body.canBeDownloaded;
     let minAge = req.body.minAgeRestriction;
+    let pubDate = req.body.publicationDate;
     let dataAnswer: Array<object> = []
     //without Resolution check
     if (updateVideo) {
@@ -110,6 +111,10 @@ videosRouter.put('/:id', (req: Request, res: Response) => {
             message: 'Any<String>',
             field: 'minAgeRestriction'
         }
+        const p: dateExample = {
+            message: 'Any<String>',
+            field: 'publicationDate'
+        }
 
           if (!author || !author.trim() || author.length > 20) {
             dataAnswer.push(a)
@@ -123,11 +128,15 @@ videosRouter.put('/:id', (req: Request, res: Response) => {
           if (minAge < 1 || minAge > 18 || typeof minAge !== 'number') {
               dataAnswer.push(m)
         }
+          if (typeof pubDate !== 'string') {
+              dataAnswer.push(p)
+          }
 
         if (!title || !author || !cBD || !title.trim() || !author.trim() ||
             title.length > 40 || author.length > 20 || minAge < 1 || minAge > 18
             || typeof title !== 'string' || typeof author !== 'string'
-            || typeof cBD !== 'boolean' || typeof minAge !== 'number') {
+            || typeof cBD !== 'boolean' || typeof minAge !== 'number'
+            || typeof pubDate !== 'string') {
             res.status(400).send({
                 errorsMessages: dataAnswer
             })
