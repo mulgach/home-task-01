@@ -50,7 +50,7 @@ videosRouter.post('/', (req: Request, res: Response) => {
         }
         //add object to jason
         videos.push(newVideo)
-        res.status(200).send(newVideo)
+        res.status(201).send(newVideo);
     }
     return
 })
