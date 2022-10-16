@@ -15,6 +15,7 @@ type exampleVideo = {
     publicationDate: string,
     availableResolutions: Array<string>
 }
+type dateExample = {message: string, field: string}
 
 videosRouter.get('/', (req: Request, res: Response) => {
     res.status(200).send(videos)
@@ -22,21 +23,20 @@ videosRouter.get('/', (req: Request, res: Response) => {
 videosRouter.post('/', (req: Request, res: Response) => {
     let title = req.body.title;
     let author = req.body.author;
-    let avRes = req.body.availableResolutions;
     let dataAnswer = []
-    let anyString: Array<string> = []
     //without Resolution check
-    let t = {
-        message: typeof anyString,
-        field: "title"
+    const t: dateExample = {
+        message:  'Any<String>',
+        field: 'title'
     }
-    let a = {
-        message: typeof anyString,
-        field: "author"
+    const a: dateExample = {
+        message: 'Any<String>',
+        field: 'author'
     }
     if (!title || !title.trim() || title.length > 40) {
         dataAnswer.push(t)
-    } else if (!author || !author.trim() || author.length > 20) {
+    }
+    if (!author || !author.trim() || author.length > 20) {
         dataAnswer.push(a)
     }
 
@@ -77,27 +77,27 @@ videosRouter.put('/:id', (req: Request, res: Response) => {
     let updateVideo = videos.find(v => v.id === +req.params.id)
     let title = req.body.title;
     let author = req.body.author;
-    let avRes = req.body.availableResolutions;
     let cBD = req.body.canBeDownloaded;
     let minAge = req.body.minAgeRestriction;
     //without Resolution check
     if (updateVideo) {
         //without Resolution check
-        let t = {
-            message:  "Any<String>",
-            field: "title"
+
+        const t: dateExample = {
+            message:  'Any<String>',
+            field: 'title'
         }
-        let a = {
-            message: "Any<String>",
-            field: "author"
+        const a: dateExample = {
+            message: 'Any<String>',
+            field: 'author'
         }
-        let c = {
-            message: "Any<String>",
-            field: "canBeDownloaded"
+        const c: dateExample = {
+            message: 'Any<String>',
+            field: 'canBeDownloaded'
         }
-        let m = {
-            message: "Any<String>",
-            field: "minAgeRestriction"
+        const m: dateExample = {
+            message: 'Any<String>',
+            field: 'minAgeRestriction'
         }
         let dataAnswer: Array<object> = []
           if (!author || !author.trim() || author.length > 20) {
